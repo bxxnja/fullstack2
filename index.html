@@ -1,0 +1,1024 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Galaxia Interactiva</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      overflow: hidden;
+      background: #000;
+      width: 100%;
+      height: 100%;
+    }
+    #galaxy-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      display: block;
+      touch-action: none;
+    }
+    .hud {
+      position: fixed;
+      left: 10px;
+      right: 10px;
+      bottom: 10px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      z-index: 1000;
+      background: rgba(20,15,35,0.25);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      padding: 8px;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      color: #fff;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    }
+    .hud button {
+      padding: 8px 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    @media (max-width: 768px) {
+      .hud {
+        bottom: 5px;
+        padding: 6px;
+      }
+      .hud button {
+        padding: 6px 10px;
+        font-size: 12px;
+      }
+    }
+  </style>
+      #mensaje-sorpresa{font-size:16px!important;bottom:40px!important}
+      .hud{bottom:5px;padding:6px}
+      .hud button{padding:6px 10px;font-size:12px}
+    }
+      
+    #galaxy-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw !important;
+      height: 100vh !important;
+      display: block;
+      touch-action: none;
+    }
+    
+    .hud {
+      position: fixed;
+      left: 10px;
+      right: 10px;
+      bottom: 10px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      z-index: 1000;
+      background: rgba(20, 15, 35, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 12px;
+      padding: 8px;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      color: #fff;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    }
+    
+    .hud button {
+      padding: 8px 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    @media (max-width: 768px) {
+      #mensaje-sorpresa {
+        font-size: 16px !important;
+        bottom: 40px !important;
+      }
+      .hud {
+        bottom: 5px;
+        padding: 6px;
+      }
+      .hud button {
+        padding: 6px 10px;
+        font-size: 12px;
+      }
+    }
+      
+    #galaxy-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw !important;
+      height: 100vh !important;
+      display: block;
+      touch-action: none;
+    }
+    .hud {
+      position: fixed;
+      left: 10px;
+      right: 10px;
+      bottom: 10px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      z-index: 1000;
+      background: rgba(20,15,35,.25);
+      border: 1px solid rgba(255,255,255,.06);
+      border-radius: 12px;
+      padding: 8px;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      color: #fff;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial;
+    }
+    .hud button {
+      padding: 8px 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,.1);
+      background: rgba(255,255,255,.1);
+      color: #fff;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+    @media (max-width: 768px) {
+      /* Ajustes específicos para móvil */
+      #mensaje-sorpresa {
+        font-size: 16px !important;
+        bottom: 40px !important;
+      }
+      .hud {
+        bottom: 5px;
+        padding: 6px;
+      }
+      .hud button {
+        padding: 6px 10px;
+        font-size: 12px;
+      }
+    }
+   
+    .hud button{padding:8px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#fff}
+    .hud input[type=file]{display:none}
+    .pill{position:fixed;top:10px;left:50%;transform:translateX(-50%);padding:6px 12px;border-radius:999px;
+          background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:#fff;font:12px system-ui}
+    .error{position:fixed;inset:auto 10px 70px 10px;background:#260015;color:#ffd9f7;border:1px solid #ff8ae5;border-radius:10px;padding:10px;font:12px system-ui;display:none}
+    
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+</head>
+<body>
+<canvas id="galaxy-canvas"></canvas>
+<div class="pill">Arrastra • Pinch/rueda • Doble toque: efecto</div>
+<div id="err" class="error"></div>
+<div class="hud"></div>
+<canvas id="fx" style="position:fixed;inset:0;pointer-events:none;"></canvas>
+<script>
+const CONFIG = {
+  phrases: [
+    'Eres mi vida entera 💖',
+    'Gracias por estar 🤍',
+    'Siempre te voy a apoyar amor 💪',
+    'Estás riquísima mamii 😍',
+    'Eres increíble ✨',
+    'Eres genial 💫',
+    'Eres maravillosa 🌹',
+    'Tus ojitos son bellísimos 👀',
+    'Mi amorrr ❤️',
+    'Mi corazón 💓',
+    'Mi niña hermosa 💘',
+    'Te amoo mucho con demasiado 😘',
+    'Me encantas 💞',
+    'Te quiero 💗',
+    'Eres mi todo 💎',
+    'Iluminas mis días ☀️',
+    'Siempre juntos ♾️',
+    'Seré un pilar para ti 🧱',
+    'Apóyate en mí 🤝',
+    'Siempre te amaré 💘',
+    'Gracias por todo 🌈',
+    'Perdón por lo malo 😔',
+    'Perdón por lo poco 🙏',
+    'Te mereces el mundo 🌍',
+    'Eres tan amable y dulce 🕊️',
+    'Tu cabello me encanta 💫',
+    'Brillas cuando sonríes 🌟',
+    'Tu ternura me derrite 💗',
+    'Me haces sentir en casa 🏡',
+    'Tu risa es mi melodía favorita 🎶',
+    'Eres mi calma y mi locura 🌸',
+    'Cada día contigo vale la pena 💞',
+    'Eres muy inteligente, podrás con todo 🌻',
+    'Te amo porque eres mi luz 🌅',
+    'Te amo con todo mi corazón ❤️',
+    'Te amo porque haces mis días más lindos 💐',
+    'Contigo todo tiene sentido 🌍',
+    'Te amo con el alma 💞',
+    'Cada día te amo más bb 💘',
+    'Eres mi lugar seguro 🏡',
+    'Estoy muy orgulloso de ti 💖',
+    'Eres tan inteligente y brillante 🧠',
+    'Tu bondad no tiene límites 💫',
+    'Eres un ser de luz 🌟',
+    'Tu corazón es puro y hermoso 🤍',
+    'Eres fuerte, valiente y única 💪',
+    'Tu forma de ser me inspira mucho mi vida 🌻',
+    'Eres un sueño hecho realidad 💭',
+    'Amo cómo miras la vida con tanta ternura 💕',
+    'Eres hermosa 🌹',
+    'Si tú estás bien, yo soy feliz 💕'
+  ],
+  theme: 'pink',
+  shape: 'oval',
+  effect: 'sparks'
+};
+
+
+// ==== WEBGL ====
+const canvas = document.getElementById('galaxy-canvas');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias:true });
+renderer.setPixelRatio(Math.min(2, window.devicePixelRatio||1));
+renderer.setSize(window.innerWidth, window.innerHeight);
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color('#300030'); // Color inicial
+
+// Configurar color de fondo según la hora
+function updateSceneBackground() {
+  const hour = new Date().getHours();
+  if (hour >= 6 && hour <= 18) {
+    // Tonos rosados suaves para el día
+    scene.background = new THREE.Color('#ffe0e5');
+  } else {
+    // Tonos rosados oscuros para la noche
+    scene.background = new THREE.Color('#300030');
+  }
+}
+updateSceneBackground();
+setInterval(updateSceneBackground, 60000); // Actualizar cada minuto
+
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 2000);
+camera.position.set(0,26,110);
+const controls = new THREE.OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+
+// Fondo estrellas
+function createStarTexture(size=1024, count=2400) {
+  const c = document.createElement('canvas'); c.width=c.height=size;
+  const g = c.getContext('2d');
+  // Fondo verdoso muy oscuro tipo noche polar
+  g.fillStyle = '#00130e';
+  g.fillRect(0,0,size,size);
+  // Sutil degradado vertical para tono de aurora
+  const vgrad = g.createLinearGradient(0,0,0,size);
+  vgrad.addColorStop(0,'rgba(0,40,30,0.35)');
+  vgrad.addColorStop(0.5,'rgba(0,25,20,0.10)');
+  vgrad.addColorStop(1,'rgba(0,50,35,0.25)');
+  g.fillStyle = vgrad; g.fillRect(0,0,size,size);
+  // Bandas suaves tipo cortinas de aurora
+  const bands = 6;
+  for (let b=0; b<bands; b++){
+    const x0 = (b+0.5)/bands * size + (Math.random()-0.5)*size*0.1;
+    const w = size*(0.08 + Math.random()*0.06);
+    const grad = g.createRadialGradient(x0, size*0.35, w*0.1, x0, size*0.35, w);
+    grad.addColorStop(0, 'rgba(120,255,180,0.08)');
+    grad.addColorStop(0.6, 'rgba(40,200,140,0.05)');
+    grad.addColorStop(1, 'rgba(0,0,0,0.0)');
+    g.fillStyle = grad;
+    g.beginPath(); g.arc(x0, size*0.35, w, 0, Math.PI*2); g.fill();
+  }
+  // Puntos como estrellas en tonos verdosos
+  for (let i=0;i<count;i++) {
+    const x = Math.random()*size, y = Math.random()*size;
+    const alpha = Math.random()*0.75;
+    const r = 0.6 + Math.random()*1.0;
+    const gVal = 200 + Math.floor(Math.random()*55);
+    const bVal = 140 + Math.floor(Math.random()*60);
+    g.fillStyle = 'rgba(100,'+gVal+','+bVal+','+alpha+')';
+    g.beginPath(); g.arc(x,y,r,0,Math.PI*2); g.fill();
+  }
+  return new THREE.CanvasTexture(c);
+}
+scene.add(new THREE.Mesh(new THREE.SphereGeometry(600,64,64),
+  new THREE.MeshBasicMaterial({ map: createStarTexture(), side: THREE.BackSide })));
+
+// Frases con efecto de brillo
+const galaxy = new THREE.Group(); scene.add(galaxy);
+for (let i=0;i<CONFIG.phrases.length*3;i++){
+  const text = CONFIG.phrases[i%CONFIG.phrases.length];
+  const c=document.createElement('canvas');c.width=1024;c.height=128; // Canvas más grande
+  const g=c.getContext('2d');
+  // Añadir brillo suave
+  g.shadowColor = 'rgba(255,255,255,0.8)';
+  g.shadowBlur = 15;
+  g.font='bold 40px Arial';g.fillStyle='#fff';g.textAlign='center'; // Fuente más grande
+  // Texto con borde suave
+  g.strokeStyle = 'rgba(255,255,255,0.3)';
+  g.lineWidth = 3;
+  g.strokeText(text,c.width/2,c.height/2); // Centrado en el canvas
+  g.fillText(text,c.width/2,c.height/2); // Centrado en el canvas
+  const tex=new THREE.CanvasTexture(c);
+  const spr=new THREE.Sprite(new THREE.SpriteMaterial({ map:tex, transparent:true, opacity: 0.9 }));
+  const angle = i/50*Math.PI*2; const dist = 65+Math.random()*40; // Mayor distancia entre frases
+  spr.position.set(Math.cos(angle)*dist,(Math.random()-0.5)*20,Math.sin(angle)*dist);
+  spr.scale.set(45,6,1); // Aumentado más el ancho y el alto
+  galaxy.add(spr);
+}
+
+// Corazón central 3D
+function createHeartShape(size=12){
+  const s = size;
+  const x = 0, y = 0;
+  const shape = new THREE.Shape();
+  shape.moveTo(x, y);
+  // Bézier para corazón simétrico
+  shape.bezierCurveTo(x - s, y - s, x - s*1.6, y + s*0.8, x, y + s*1.6);
+  shape.bezierCurveTo(x + s*1.6, y + s*0.8, x + s, y - s, x, y);
+  return shape;
+}
+const heartExtrude = new THREE.ExtrudeGeometry(createHeartShape(8), {
+  depth: 6,
+  bevelEnabled: true,
+  bevelThickness: 0.8,
+  bevelSize: 0.8,
+  bevelSegments: 3
+});
+heartExtrude.center();
+// Material del corazón con color dinámico
+const heartMat = new THREE.MeshPhongMaterial({ 
+  color: 0xff4d88, 
+  shininess: 80, 
+  specular: 0xffcce0 
+});
+const heartCore = new THREE.Mesh(heartExtrude, heartMat);
+heartCore.rotation.z = Math.PI; // orientar con el pico hacia abajo
+scene.add(heartCore);
+
+// Función para actualizar el color del corazón
+const baseColor = new THREE.Color(0xff4d88);
+function updateHeartColor(t) {
+  // Variación entre tonos rosas
+  const hue = (Math.sin(t * 0.2) * 0.5 + 0.5) * 0.1 + 0.93;
+  heartCore.material.color.setHSL(hue, 0.7, 0.6);
+}
+// Luces para volumen
+const keyLight = new THREE.PointLight(0xff88aa, 1.0, 400); keyLight.position.set(60, 60, 80); scene.add(keyLight);
+const fillLight = new THREE.PointLight(0xffffff, 0.5, 400); fillLight.position.set(-40, 30, 50); scene.add(fillLight);
+const rimLight = new THREE.PointLight(0xff66aa, 0.7, 400); rimLight.position.set(0, -50, -60); scene.add(rimLight);
+
+// Texto flotante sobre el corazón
+function makeTextSprite(text){
+  const c=document.createElement('canvas'); c.width=1024; c.height=256;
+  const g=c.getContext('2d');
+  g.clearRect(0,0,c.width,c.height);
+  
+  // Añadir sombra brillante para contraste
+  g.shadowColor = 'rgba(255,182,193,0.9)';
+  g.shadowBlur = 25;
+  g.shadowOffsetX = 0;
+  g.shadowOffsetY = 0;
+  
+  // Primero dibujamos un borde grueso blanco
+  g.strokeStyle = '#ffffff';
+  g.lineWidth = 8;
+  g.textAlign = 'center';
+  g.textBaseline = 'middle';
+  g.font = 'bold 64px Arial';
+  g.strokeText(text, c.width/2, c.height/2);
+  
+  // Luego el texto en blanco puro
+  g.fillStyle = '#ffffff';
+  g.fillText(text, c.width/2, c.height/2);
+  
+  // Añadir un brillo extra en rosa
+  g.shadowColor = 'rgba(255,105,180,0.8)';
+  g.shadowBlur = 15;
+  g.fillStyle = 'rgba(255,255,255,0.9)';
+  g.fillText(text, c.width/2, c.height/2);
+  const tex=new THREE.CanvasTexture(c); tex.needsUpdate=true;
+  return new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, transparent:true }));
+}
+// Función para calcular tiempo transcurrido
+function getTimeSince(startDate) {
+    const now = new Date();
+    const start = new Date(startDate);
+    const diff = now - start;
+    
+    const seconds = Math.floor(diff / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+    const months = Math.floor(days / 30.44); // promedio de días por mes
+    const years = Math.floor(months / 12);
+    
+    const remainingMonths = months % 12;
+    const remainingDays = Math.floor(days % 30.44);
+    const remainingHours = hours % 24;
+    const remainingMinutes = minutes % 60;
+    const remainingSeconds = seconds % 60;
+    
+    return `${years > 0 ? years + ' años, ' : ''}${remainingMonths} meses, ${remainingDays} días\n${remainingHours}h ${remainingMinutes}m ${remainingSeconds}s`;
+}
+
+// Crear textos
+const loveText = makeTextSprite('Emily te amo desde hace 💗');
+const dateText = makeTextSprite(getTimeSince('2025-06-07'));
+
+loveText.scale.set(40,10,1);
+loveText.position.set(0, 22, 0);
+
+dateText.scale.set(25,12,1); // Ajustado para dos líneas de texto
+dateText.position.set(0, 12, 0);
+
+scene.add(dateText);
+const dateBaseY = dateText.position.y;
+
+// Actualizar el contador cada segundo
+setInterval(() => {
+    const newTexture = makeTextSprite(getTimeSince('2025-06-07')).material.map;
+    dateText.material.map = newTexture;
+    dateText.material.map.needsUpdate = true;
+}, 1000);
+scene.add(loveText);
+const loveBaseY = loveText.position.y;
+
+// Mini corazones entre frases
+function createHeartTexture(size=64, color='#ff7aa8'){
+  const c=document.createElement('canvas'); c.width=c.height=size;
+  const g=c.getContext('2d'); g.clearRect(0,0,size,size);
+  g.fillStyle=color;
+  g.beginPath();
+  const s=size/2;
+  const cx=s, cy=s*0.9;
+  g.moveTo(cx, cy);
+  g.bezierCurveTo(cx - s*0.9, cy - s*0.9, cx - s*1.2, cy + s*0.4, cx, cy + s*0.9);
+  g.bezierCurveTo(cx + s*1.2, cy + s*0.4, cx + s*0.9, cy - s*0.9, cx, cy);
+  g.closePath(); g.fill();
+  const tex=new THREE.CanvasTexture(c);
+  tex.anisotropy = 4; tex.needsUpdate = true; return tex;
+}
+const heartTexSmall = createHeartTexture(64, '#ff6fa3');
+const heartSmallGroup = new THREE.Group(); scene.add(heartSmallGroup);
+const miniCount = Math.min(600, CONFIG.phrases.length*20);
+for(let i=0;i<miniCount;i++){
+  const spr=new THREE.Sprite(new THREE.SpriteMaterial({ map:heartTexSmall, transparent:true }));
+  const ring = 40 + Math.random()*70;
+  const angle = Math.random()*Math.PI*2;
+  spr.position.set(Math.cos(angle)*ring, (Math.random()-0.5)*22, Math.sin(angle)*ring);
+  const s = 0.8 + Math.random()*0.8;
+  spr.scale.set(s,s,1);
+  spr.material.opacity = 0.6 + Math.random()*0.3;
+  heartSmallGroup.add(spr);
+}
+
+// Estrellitas extra como puntos brillantes circulares
+function makeDotTexture(sz=64){
+  const c=document.createElement('canvas'); c.width=c.height=sz; const g=c.getContext('2d');
+  const grad=g.createRadialGradient(sz/2,sz/2,0,sz/2,sz/2,sz/2);
+  grad.addColorStop(0,'rgba(255,255,255,1)');
+  grad.addColorStop(1,'rgba(255,255,255,0)');
+  g.fillStyle=grad; g.beginPath(); g.arc(sz/2,sz/2,sz/2,0,Math.PI*2); g.fill();
+  const t=new THREE.CanvasTexture(c); t.needsUpdate=true; return t;
+}
+const dotTex = makeDotTexture(64);
+// Mariposas brillantes
+function createButterflyGeometry() {
+  const geometry = new THREE.BufferGeometry();
+  const positions = [];
+  const wing = [
+    0,0,0,  // centro
+    1,1,0,  // punta superior
+    2,0,0,  // punta exterior
+    1,-1,0  // punta inferior
+  ];
+  // Crear ambas alas
+  for(let side of [-1,1]) {
+    for(let i=0; i<wing.length; i+=3) {
+      positions.push(wing[i]*side, wing[i+1], wing[i+2]);
+    }
+  }
+  geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+  geometry.setIndex([
+    0,1,2, 0,2,3,  // ala derecha
+    4,5,6, 4,6,7   // ala izquierda
+  ]);
+  return geometry;
+}
+
+const butterflyGeom = createButterflyGeometry();
+const butterflyMat = new THREE.MeshBasicMaterial({
+  color: 0xffb6c1,
+  side: THREE.DoubleSide,
+  transparent: true,
+  opacity: 0.6
+});
+
+const butterflies = new THREE.Group();
+for(let i=0; i<30; i++) {
+  const butterfly = new THREE.Mesh(butterflyGeom, butterflyMat);
+  const radius = 40 + Math.random() * 60;
+  const angle = Math.random() * Math.PI * 2;
+  butterfly.position.set(
+    Math.cos(angle) * radius,
+    (Math.random() - 0.5) * 30,
+    Math.sin(angle) * radius
+  );
+  butterfly.scale.set(0.5, 0.5, 0.5);
+  butterfly.userData = {
+    angle: angle,
+    radius: radius,
+    speed: 0.001 + Math.random() * 0.002,
+    flapSpeed: 0.1 + Math.random() * 0.2
+  };
+  butterflies.add(butterfly);
+}
+scene.add(butterflies);
+
+const starPtsCount = 1200;
+const starGeom = new THREE.BufferGeometry();
+const starPos = new Float32Array(starPtsCount*3);
+for(let i=0;i<starPtsCount;i++){
+  const r = 60 + Math.random()*120;
+  const a = Math.random()*Math.PI*2;
+  const y = (Math.random()-0.5)*30;
+  starPos[i*3+0] = Math.cos(a)*r;
+  starPos[i*3+1] = y;
+  starPos[i*3+2] = Math.sin(a)*r;
+}
+starGeom.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
+const starMat = new THREE.PointsMaterial({ map: dotTex, color: 0xffffff, size: 1.2, sizeAttenuation: true, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending });
+const extraStars = new THREE.Points(starGeom, starMat); scene.add(extraStars);
+
+
+
+// Partículas flotantes (corazones y estrellas)
+const floatingParticles = new THREE.Group();
+scene.add(floatingParticles);
+
+// Crear textura de corazón para partículas
+function createParticleHeartTexture() {
+  const canvas = document.createElement('canvas');
+  canvas.width = canvas.height = 64;
+  const ctx = canvas.getContext('2d');
+  
+  ctx.fillStyle = '#ff69b4';
+  ctx.shadowColor = '#ff1493';
+  ctx.shadowBlur = 15;
+  
+  const x = 32, y = 32;
+  const size = 16;
+  
+  ctx.beginPath();
+  ctx.moveTo(x, y + size * 0.3);
+  ctx.bezierCurveTo(
+    x - size, y - size * 0.7,
+    x - size * 1.5, y + size * 0.5,
+    x, y + size * 1.3
+  );
+  ctx.bezierCurveTo(
+    x + size * 1.5, y + size * 0.5,
+    x + size, y - size * 0.7,
+    x, y + size * 0.3
+  );
+  ctx.fill();
+  
+  return new THREE.CanvasTexture(canvas);
+}
+
+// Crear textura de estrella para partículas
+function createParticleStarTexture() {
+  const canvas = document.createElement('canvas');
+  canvas.width = canvas.height = 64;
+  const ctx = canvas.getContext('2d');
+  
+  ctx.fillStyle = '#ffd700';
+  ctx.shadowColor = '#ffff00';
+  ctx.shadowBlur = 15;
+  
+  const points = 5;
+  const outerRadius = 16;
+  const innerRadius = 8;
+  const cx = 32, cy = 32;
+  
+  ctx.beginPath();
+  for(let i = 0; i < points * 2; i++) {
+    const radius = i % 2 === 0 ? outerRadius : innerRadius;
+    const angle = (i * Math.PI) / points;
+    const x = cx + radius * Math.sin(angle);
+    const y = cy + radius * Math.cos(angle);
+    if(i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  }
+  ctx.closePath();
+  ctx.fill();
+  
+  return new THREE.CanvasTexture(canvas);
+}
+
+const heartTex = createParticleHeartTexture();
+const starTex = createParticleStarTexture();
+
+// Crear partículas flotantes
+for(let i = 0; i < 50; i++) {
+  const texture = Math.random() > 0.5 ? heartTex : starTex;
+  const material = new THREE.SpriteMaterial({
+    map: texture,
+    transparent: true,
+    opacity: 0.8,
+    blending: THREE.AdditiveBlending
+  });
+  
+  const particle = new THREE.Sprite(material);
+  
+  // Posición inicial aleatoria
+  particle.position.set(
+    (Math.random() - 0.5) * 100,
+    -20 + Math.random() * 40,
+    (Math.random() - 0.5) * 100
+  );
+  
+  const scale = 0.5 + Math.random() * 1;
+  particle.scale.set(scale, scale, 1);
+  
+  // Datos para la animación
+  particle.userData = {
+    speed: 0.05 + Math.random() * 0.05,
+    rotSpeed: (Math.random() - 0.5) * 0.02,
+    maxHeight: 30 + Math.random() * 40
+  };
+  
+  floatingParticles.add(particle);
+}
+
+// Evento de clic en el corazón
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
+
+window.addEventListener('click', (event) => {
+  mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+  mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+  
+  raycaster.setFromCamera(mouse, camera);
+  const intersects = raycaster.intersectObject(heartCore);
+  
+  if (intersects.length > 0) {
+    const phrase = CONFIG.phrases[Math.floor(Math.random() * CONFIG.phrases.length)];
+    const spr = makeTextSprite(phrase);
+    spr.scale.set(12, 3, 1);
+    spr.position.set(
+      (Math.random() - 0.5) * 40,
+      10 + Math.random() * 10,
+      (Math.random() - 0.5) * 40
+    );
+    scene.add(spr);
+    setTimeout(() => scene.remove(spr), 5000);
+  }
+});
+
+// Auroras verdes de fondo (canvas animado sobre un plano con blending)
+const auroraCanvas = document.createElement('canvas');
+auroraCanvas.width = 1024; auroraCanvas.height = 512;
+const auroraCtx = auroraCanvas.getContext('2d');
+function drawAurora(t){
+  const w=auroraCanvas.width, h=auroraCanvas.height;
+  auroraCtx.clearRect(0,0,w,h);
+  auroraCtx.globalCompositeOperation='lighter';
+  const bands = 5; // Aumentado a 5 bandas para más detalle
+  
+  // Colores suaves en rosa y púrpura
+  const colors = [
+    ['rgba(255,182,193,0.0)', 'rgba(255,182,193,0.15)', 'rgba(255,192,203,0.25)', 'rgba(255,130,171,0.08)', 'rgba(0,0,0,0.0)'],  // Rosa claro
+    ['rgba(255,105,180,0.0)', 'rgba(255,105,180,0.12)', 'rgba(255,20,147,0.20)', 'rgba(199,21,133,0.06)', 'rgba(0,0,0,0.0)'],     // Rosa fuerte
+    ['rgba(238,130,238,0.0)', 'rgba(238,130,238,0.10)', 'rgba(218,112,214,0.18)', 'rgba(186,85,211,0.05)', 'rgba(0,0,0,0.0)'],    // Violeta
+    ['rgba(255,192,203,0.0)', 'rgba(255,192,203,0.15)', 'rgba(255,182,193,0.22)', 'rgba(255,105,180,0.07)', 'rgba(0,0,0,0.0)'],   // Rosa pastel
+    ['rgba(219,112,147,0.0)', 'rgba(219,112,147,0.12)', 'rgba(199,21,133,0.20)', 'rgba(176,48,96,0.06)', 'rgba(0,0,0,0.0)']       // Rosa profundo
+  ];
+
+  for(let b=0;b<bands;b++){
+    const phase = t*0.25 + b*1.2; // Movimiento más suave
+    const baseY = h*0.4 + Math.sin(phase*0.6+b)*h*0.06;
+    const amp = h*(0.12 + b*0.025);
+    
+    auroraCtx.beginPath();
+    auroraCtx.moveTo(0, baseY + Math.sin(phase)*amp);
+    
+    // Curvas más suaves
+    for(let x=0;x<=w;x+=6){ // Más puntos para mayor suavidad
+      const nx = x/w;
+      const y = baseY
+        + Math.sin(nx*8 + phase)*amp*0.5
+        + Math.sin(nx*2.5 + phase*0.7)*amp*0.3
+        + Math.sin(nx*15.0 + phase*1.5)*amp*0.12;
+      auroraCtx.lineTo(x, y);
+    }
+
+    const grad = auroraCtx.createLinearGradient(0, baseY-amp*1.2, 0, baseY+amp*2);
+    const colorSet = colors[b % colors.length];
+    grad.addColorStop(0, colorSet[0]);
+    grad.addColorStop(0.35, colorSet[1]);
+    grad.addColorStop(0.55, colorSet[2]);
+    grad.addColorStop(0.85, colorSet[3]);
+    grad.addColorStop(1, colorSet[4]);
+
+    auroraCtx.lineWidth = 8 + b*2.5; // Líneas más gruesas
+    auroraCtx.strokeStyle = grad;
+    auroraCtx.shadowColor = colorSet[2];
+    auroraCtx.shadowBlur = 30 + b*12;
+    auroraCtx.stroke();
+  }
+  auroraCtx.shadowBlur = 0;
+}
+const auroraTex = new THREE.CanvasTexture(auroraCanvas);
+auroraTex.needsUpdate = true;
+const auroraMat = new THREE.MeshBasicMaterial({ 
+  map: auroraTex, 
+  transparent: true, 
+  depthWrite: false, 
+  blending: THREE.AdditiveBlending, 
+  opacity: 0.9  // Aumentada la opacidad
+});
+const auroraPlane = new THREE.Mesh(new THREE.PlaneGeometry(1000, 500), auroraMat); // Tamaño aumentado
+auroraPlane.position.set(0, 15, -150); // Ajustada la posición
+scene.add(auroraPlane);
+
+// Generar mensaje "Te amo" flotante
+setInterval(() => {
+  const text = makeTextSprite('Te amo 💖');
+  text.scale.set(20,5,1);
+  text.position.set((Math.random()-0.5)*40, 10, (Math.random()-0.5)*40);
+  scene.add(text);
+  // Animación de desvanecimiento
+  const startTime = performance.now();
+  const duration = 4000;
+  function fadeOut() {
+    const elapsed = performance.now() - startTime;
+    if (elapsed < duration) {
+      text.material.opacity = 1 - (elapsed / duration);
+      requestAnimationFrame(fadeOut);
+    } else {
+      scene.remove(text);
+    }
+  }
+  fadeOut();
+}, 7000);
+
+// Animación
+function animate() {
+  requestAnimationFrame(animate);
+  
+  // Tiempo global para todas las animaciones
+  const t = performance.now()*0.001;
+  
+  galaxy.rotation.y += 0.0008; // Rotación más lenta para mejor lectura
+  
+  // Animar partículas flotantes
+  floatingParticles.children.forEach((particle, i) => {
+    particle.position.y += particle.userData.speed;
+    particle.rotation.z += particle.userData.rotSpeed;
+    particle.material.opacity = (1 - (particle.position.y / particle.userData.maxHeight)) * 0.8;
+    
+    if (particle.position.y >= particle.userData.maxHeight) {
+      particle.position.y = -20;
+      particle.position.x = (Math.random() - 0.5) * 100;
+      particle.position.z = (Math.random() - 0.5) * 100;
+      particle.material.opacity = 0.8;
+    }
+  });
+
+  // Animar mariposas
+  butterflies.children.forEach(butterfly => {
+    const data = butterfly.userData;
+    data.angle += data.speed;
+    butterfly.position.x = Math.cos(data.angle) * data.radius;
+    butterfly.position.z = Math.sin(data.angle) * data.radius;
+    butterfly.rotation.z = Math.sin(t * data.flapSpeed) * 0.5;
+    butterfly.lookAt(0, butterfly.position.y, 0);
+    butterfly.rotateY(Math.PI / 2);
+  });
+
+  // vaivén de los textos
+  loveText.position.y = loveBaseY + Math.sin(t*1.6)*0.8;
+  dateText.position.y = dateBaseY + Math.sin((t+0.4)*1.6)*0.8;
+  heartSmallGroup.rotation.y += 0.0012;
+  extraStars.rotation.y += 0.0008;
+  
+  // respiración sutil del corazón 3D
+  const s = 1 + Math.sin(t*2)*0.03;
+  heartCore.scale.set(s,s,s);
+
+  // animación y orientación de auroras
+  drawAurora(t);
+  auroraTex.needsUpdate = true;
+  auroraPlane.lookAt(camera.position);
+  
+  // actualizar controles y renderizar
+  controls.update();
+  renderer.render(scene, camera);
+}
+
+animate();
+
+// Resize
+window.addEventListener('resize', () => {
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  camera.aspect = window.innerWidth/window.innerHeight;
+  camera.updateProjectionMatrix();
+});
+
+animate();
+// Resize
+window.addEventListener('resize', ()=>{
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  camera.aspect = window.innerWidth/window.innerHeight;
+  camera.updateProjectionMatrix();
+});
+
+// Efecto doble toque
+const fx=document.getElementById('fx'); const ctx2=fx.getContext('2d');
+function resizeFx(){fx.width=window.innerWidth*2;fx.height=window.innerHeight*2;fx.style.width=window.innerWidth+'px';fx.style.height=window.innerHeight+'px';}
+resizeFx(); addEventListener('resize', resizeFx);
+const sparks=[];
+function spawn(x,y){
+  const colors = ['255,182,193', '255,192,203', '255,130,171', '255,105,180'];
+  for(let i=0;i<30;i++) {
+    const angle = (Math.random()*Math.PI*2);
+    const speed = 2 + Math.random()*3;
+    const size = 2 + Math.random()*4;
+    const color = colors[Math.floor(Math.random()*colors.length)];
+    sparks.push({
+      x:x*2, y:y*2,
+      vx:Math.cos(angle)*speed,
+      vy:Math.sin(angle)*speed,
+      life:1,
+      size:size,
+      color:color
+    });
+  }
+}
+let lastTap=0;
+addEventListener('click',e=>{if(performance.now()-lastTap<300)spawn(e.clientX,e.clientY);lastTap=performance.now();});
+addEventListener('touchend',e=>{const t=e.changedTouches[0];if(performance.now()-lastTap<300)spawn(t.clientX,t.clientY);lastTap=performance.now();});
+function loopFx(){
+  ctx2.clearRect(0,0,fx.width,fx.height);
+  ctx2.globalCompositeOperation = 'lighter';
+  for(let i=sparks.length-1;i>=0;i--){
+    const s=sparks[i];
+    s.x+=s.vx; s.y+=s.vy;
+    s.vy+=0.1; // gravedad sutil
+    s.life-=0.02;
+    ctx2.fillStyle=`rgba(${s.color},${s.life})`;
+    ctx2.shadowColor=`rgba(${s.color},${s.life})`;
+    ctx2.shadowBlur=10;
+    ctx2.beginPath();
+    ctx2.arc(s.x,s.y,s.size,0,Math.PI*2);
+    ctx2.fill();
+    if(s.life<=0)sparks.splice(i,1);
+  }
+  ctx2.globalCompositeOperation = 'source-over';
+  requestAnimationFrame(loopFx);
+}
+loopFx();
+
+// Mensaje sorpresa después de 10 segundos
+setTimeout(()=>{
+  const msg=document.createElement('div');
+  msg.textContent='💌 Gracias por existir, mi amor 💫';
+  Object.assign(msg.style,{
+    position:'fixed',top:'60px',left:'50%',transform:'translateX(-50%)',
+    color:'#fff',fontFamily:'Poppins, sans-serif',fontSize:'18px',
+    textShadow:'0 0 15px #ffb6c1',opacity:'0',transition:'opacity 2s'
+  });
+  document.body.appendChild(msg);
+  setTimeout(()=>msg.style.opacity='1',500);
+  setTimeout(()=>msg.remove(),7000);
+},10000);
+
+// Función para crear fotos estáticas
+function createStaticPhotos() {
+  const photos = [
+    'images/foto3.jpg',
+    'images/foto4.jpg',
+    'images/foto7.jpg',
+    'images/foto5.jpg'
+  ];
+
+  // Posiciones reducidas para 4 imágenes (optimizado para móvil)
+  const positions = [
+    { left: '10%', top: '20%' },
+    { left: '65%', top: '12%' },
+    { left: '30%', top: '55%' },
+    { left: '70%', top: '60%' }
+  ];
+
+  photos.forEach((photoSrc, index) => {
+    const photo = document.createElement('div');
+    const img = document.createElement('img');
+    
+    img.src = photoSrc;
+    const isMobile = window.innerWidth <= 768;
+    const size = isMobile ? '60px' : '80px';
+    
+    img.style.cssText = `
+      width: ${size};
+      height: ${size};
+      object-fit: cover;
+      border-radius: 8px;
+      border: 2px solid rgba(255,255,255,0.8);
+      box-shadow: 0 0 10px rgba(255,255,255,0.5);
+    `;
+
+    photo.style.cssText = `
+      position: fixed;
+      left: ${positions[index].left};
+      top: ${positions[index].top};
+      transform: rotate(${Math.random() * 20 - 10}deg);
+      z-index: 1;
+      opacity: 0;
+      transition: opacity 2s ease-in-out;
+    `;
+
+    photo.appendChild(img);
+    document.body.appendChild(photo);
+
+    // Convertir posiciones porcentuales a píxeles para facilitar el arrastre
+    const docW = document.documentElement.clientWidth;
+    const docH = document.documentElement.clientHeight;
+    const leftPerc = parseFloat(positions[index].left);
+    const topPerc = parseFloat(positions[index].top);
+    const leftPx = Math.round((leftPerc / 100) * docW);
+    const topPx = Math.round((topPerc / 100) * docH);
+    photo.style.left = leftPx + 'px';
+    photo.style.top = topPx + 'px';
+    photo.style.touchAction = 'none'; // importante para pointer events en móviles
+
+    // Hacer la foto arrastrable con pointer events (soporta mouse y touch)
+    (function enableDrag(target) {
+      let dragging = false;
+      let startX = 0, startY = 0, startLeft = 0, startTop = 0;
+
+      function onPointerDown(e) {
+        e.preventDefault();
+        dragging = true;
+        startX = e.clientX;
+        startY = e.clientY;
+        const r = target.getBoundingClientRect();
+        startLeft = r.left;
+        startTop = r.top;
+        try { target.setPointerCapture && target.setPointerCapture(e.pointerId); } catch (err) {}
+        target.style.transition = 'none';
+        target.style.zIndex = 2000;
+      }
+
+      function onPointerMove(e) {
+        if (!dragging) return;
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
+        target.style.left = (startLeft + dx) + 'px';
+        target.style.top = (startTop + dy) + 'px';
+      }
+
+      function onPointerUp(e) {
+        if (!dragging) return;
+        dragging = false;
+        try { target.releasePointerCapture && target.releasePointerCapture(e.pointerId); } catch (err) {}
+        target.style.transition = 'opacity 2s ease-in-out';
+        target.style.zIndex = 1;
+      }
+
+      target.addEventListener('pointerdown', onPointerDown);
+      window.addEventListener('pointermove', onPointerMove);
+      window.addEventListener('pointerup', onPointerUp);
+    })(photo);
+
+    // Aparecer gradualmente con un pequeño retraso entre cada foto
+    setTimeout(() => {
+      photo.style.opacity = '1';
+    }, index * 300);
+  });
+}
+
+// Crear las fotos estáticas cuando el documento esté listo
+document.addEventListener('DOMContentLoaded', createStaticPhotos);
+
+
+</script>
+</body>
+</html>
